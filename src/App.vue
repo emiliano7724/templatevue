@@ -1,28 +1,52 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div v-if="this.$router.currentRoute.name !== 'Login'">
+
+
+      <NavBar :appName=appName />
+      <b-jumbotron header="Template DIP" lead="Bootstrap v4 Components for Vue.js 2">
+
+      </b-jumbotron>
+    </div>
+    <router-view />
   </div>
 </template>
-
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import NavBar from "@/components/NavBar.vue";
 
 export default {
-  name: 'App',
+  name: "Home",
   components: {
-    HelloWorld
-  }
-}
+    NavBar,
+  },
+  data() {
+    return {
+      appName: "AppTemplate"
+    }
+  },
+};
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+#nav {
+  padding: 30px;
+
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
 }
 </style>
