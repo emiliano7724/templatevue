@@ -2,7 +2,7 @@ import axios from "axios";
 //const config = require('../../config.js');
 //console.log(config.HOST+':'+config.PORT+'/api');
 let Api = axios.create({
-  baseURL: "http://localhost/api"
+  baseURL: "http://localhost"
  //baseURL: "https://rollerbe.herokuapp.com/api"
 });
 
