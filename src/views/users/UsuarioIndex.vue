@@ -1,77 +1,78 @@
 <template>
   <div>
     <b-container fluid="lg">
-  
-    
-      <CardDataTable
-        :tituloSingular="tituloSingular"
-        :itemsTabla="items"
-        :headersTabla="fields"
-      />
+      <b-overlay :show="isLoading" rounded="sm">
+        <CardDataTable :itemsTabla="items" :headersTabla="fields" :urlEditForm="urlEditForm">
+          <!-- insercion del slot de botones en el header del card -->
+          <template v-slot:header>
+            <template v-if="!tieneFormChico">
+              <b-row>
+                <b-col>
+                  <b-button-group>
+                    <b-button variant="success" @click="goToCreateForm()">
+                      <b-icon icon="plus-circle-fill"></b-icon> Nuevo
+                      {{ tituloSingular }}
+                    </b-button>
+                  </b-button-group>
+                </b-col>
+                <b-col></b-col>
+                  <b-badge>
+                    <h4>Listado {{ titulo }}</h4>
+                  </b-badge>
+              
+                <b-col></b-col>
+                <b-col></b-col>
+              </b-row>
+            </template>
+            <template v-else>
+              <div>
+                <Sidebar :tituloBoton="tituloBotonSidebar" :tituloSideBar="tituloSideBar">
+                </Sidebar>
+              </div>
+            </template>
+          </template>
+        
+        </CardDataTable>
+      </b-overlay>
     </b-container>
-  
   </div>
 </template>
 <script>
 import CardDataTable from "@/components/CardDataTable.vue";
-
+import Sidebar from "@/components/Sidebar.vue";
 import User from "../../apis/User";
 export default {
   name: "Usuarioindex",
   components: {
-    CardDataTable
-   
+    CardDataTable,
+    Sidebar,
   },
   data() {
     return {
+      urlEditForm:  "usuarios",
+      tieneFormChico: false,
+      tituloBotonSidebar: "Nuevo Form chico",
+      tituloSideBar: "Nuevo Usuario",
+      isLoading: true,
       titulo: "Usuarios",
       tituloSingular: "Usuario",
-      items: [
-        {
-          isActive: true,
-          age: 40,
-          name: { first: "Dickerson", last: "Macdonald" },
-        },
-        { isActive: false, age: 21, name: { first: "Larsen", last: "Shaw" } },
-        {
-          isActive: false,
-          age: 9,
-          name: { first: "Mini", last: "Navarro" },
-          _rowVariant: "success",
-        },
-        { isActive: false, age: 89, name: { first: "Geneva", last: "Wilson" } },
-        { isActive: true, age: 38, name: { first: "Jami", last: "Carney" } },
-        { isActive: false, age: 27, name: { first: "Essie", last: "Dunlap" } },
-        { isActive: true, age: 40, name: { first: "Thor", last: "Macdonald" } },
-        {
-          isActive: true,
-          age: 87,
-          name: { first: "Larsen", last: "Shaw" },
-          _cellVariants: { age: "danger", isActive: "warning" },
-        },
-        { isActive: false, age: 26, name: { first: "Mitzi", last: "Navarro" } },
-        {
-          isActive: false,
-          age: 22,
-          name: { first: "Genevieve", last: "Wilson" },
-        },
-        { isActive: true, age: 38, name: { first: "John", last: "Carney" } },
-        { isActive: false, age: 29, name: { first: "Dick", last: "Dunlap" } },
-      ],
+      items: [],
       fields: [
-        { key: "name", label: "Nombre", sortable: true, sortDirection: "desc" },
-        { key: "age", label: "Edad", sortable: true, class: "text-center" },
+        { key: "id", label: "ID", sortable: true, sortDirection: "desc" },
         {
-          key: "isActive",
-          label: "Activo",
-          formatter: (value) => {
-            return value ? "Si" : "No";
-          },
+          key: "nombre",
+          label: "NOMBRE",
           sortable: true,
-          sortByFormatted: true,
-          filterByFormatted: true,
+          class: "text-center",
         },
-        { key: "actions", label: "Acciones" },
+        { key: "email", label: "EMAIL", sortable: true, class: "text-center" },
+        {
+          key: "created_at",
+          label: "FECHA CREACION",
+          sortable: true,
+          class: "text-center",
+        },
+        { key: "actions", label: "ACCIONES" },
       ],
     };
   },
@@ -80,11 +81,9 @@ export default {
   },
   methods: {
     goToCreateForm() {
-      this.$router.push({ name: "UserCreate" });
+      this.$router.push({ name: "UsuarioCreate" });
     },
-    goToEditForm(item) {
-      this.$router.push({ path: `users/${item.id}` });
-    },
+   
     showLoading(length) {
       if (length >= 0) {
         return (this.isLoading = false);
@@ -94,10 +93,10 @@ export default {
     getUsers() {
       User.getUsers()
         .then((response) => {
-          if (response.data.estado == "error") {
-            console.log("ocurrio un error");
+          if (response.data.DATA.estado == "error") {
+          
           } else {
-            this.items = response.data.data;
+            this.items = response.data.DATA;
 
             this.showLoading(this.items.length);
           }
@@ -106,15 +105,10 @@ export default {
           if (error.response.status === 422) {
             this.errors = error.response.data.errors;
           }
+          if (error.response.status === 401) {
+            this.$router.push({ name: "Login" });
+          }
         });
-    },
-
-    pageChange(val) {
-      this.$router.push({ query: { page: val } });
-    },
-    openModal(item) {
-      this.infoModal = true;
-      this.itemModal = item;
     },
   },
 };

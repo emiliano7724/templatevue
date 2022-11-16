@@ -16,13 +16,13 @@ export default {
 
     await Csrf.getCookie();
 
-    return Api.post("/login", form);
+    return Api.post("api/login", form);
   },
 
   async logout() {
     await Csrf.getCookie();
 
-    return Api.post("/logout");
+    return Api.post("api/logout");
   },
   async saveEntity(form) {
     await Csrf.getCookie();
@@ -30,7 +30,7 @@ export default {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   };
-    return Api.post("/user/store", form,config);
+    return Api.post("api/user/store", form,config);
   },
   async updateEntity(form) {
     await Csrf.getCookie();
@@ -38,7 +38,7 @@ export default {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   };
-    return Api.put("/user/update", form,config);
+    return Api.put("api/user/update", form,config);
   },
 
   async getUsers() {
@@ -46,7 +46,7 @@ export default {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   }; 
-    return Api.get("/proyectos/index",config);
+    return Api.get("api/users/index",config);
   },
 
   async getUser(params) {
@@ -56,7 +56,7 @@ export default {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
   };
-    return Api.post("/user/edit", params,config);
+    return Api.post("api/user/edit", params,config);
   },
   
 };
