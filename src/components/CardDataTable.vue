@@ -1,26 +1,24 @@
 <template>
   <div>
-    <b-card border-variant="secondary" :header="titulo" header-border-variant="secondary" align="left">
+    <b-card border-variant="secondary" :header="titulo" header-border-variant="secondary">
       <template #header>
-        <b-row>
-          <b-col cols="4">
-           <b-button-group>
-            <b-button variant="success">
-              <b-icon icon="plus-circle-fill"></b-icon> Nuevo {{tituloSingular}}
-            </b-button>
-            <Sidebar />
-           </b-button-group>
-          
-          </b-col>
-          <b-col cols="4">
-          
-       
-          </b-col>
-        </b-row>
+
+
+        <slot name="header"></slot>
+        <!--slot para botones arriba de la tabla -->
+
+      </template>
+      <template #footer>
+
+
+        <slot name="footer"></slot>
+        <!--slot para botones abajo de la tabla -->
+
       </template>
 
+
       <b-card-text>
-        <Table :items="itemsTabla" :fields="headersTabla"></Table>
+        <Table :items="itemsTabla" :fields="headersTabla" :urlEditForm="urlEditForm"></Table>
       </b-card-text>
     </b-card>
   </div>
@@ -28,16 +26,15 @@
 
 <script>
 import Table from "@/components/Table.vue";
-import Sidebar from "@/components/Sidebar.vue";
+
 export default {
   name: "Card",
   components: {
     Table,
-    Sidebar,
   },
   props: {
+    urlEditForm: String,
     titulo: String,
-    tituloSingular: String,
     itemsTabla: Array,
     headersTabla: Array,
   },

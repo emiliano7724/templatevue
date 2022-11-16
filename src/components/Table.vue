@@ -47,8 +47,6 @@
           ></b-form-select>
         </b-form-group>
       </b-col>
-
-   
     </b-row>
 
     <!-- Main table element -->
@@ -73,14 +71,21 @@
 
       <template #cell(actions)="row">
         <b-button
-          size="sm"
+          v-b-tooltip.hover title="Ampliar"
+          pill
+          
           @click="info(row.item, row.index, $event.target)"
           class="mr-1"
+          variant="primary"
         >
-          Ampliar
+        <b-icon icon="eye"></b-icon>
         </b-button>
-        <b-button size="sm" @click="row.toggleDetails">
-          {{ row.detailsShowing ? "Ocultar" : "Mostrar" }} Detalle
+        <b-button v-b-tooltip.hover title="Detalle"  pill  @click="row.toggleDetails">
+          <b-icon icon="menu-down"></b-icon>
+        </b-button>
+        <b-button @click="goEditForm(row.item)" v-b-tooltip.hover title="Editar" pill variant="warning">
+          <b-icon icon="pen-fill"></b-icon>
+       
         </b-button>
       </template>
 
@@ -94,16 +99,17 @@
         </b-card>
       </template>
     </b-table>
+   
     <b-col sm="7" md="6" class="my-1">
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="totalRows"
-          :per-page="perPage"
-          align="fill"
-          size="sm"
-          class="my-0"
-        ></b-pagination>
-      </b-col>
+      <b-pagination
+        v-model="currentPage"
+        :total-rows="items.length"
+        :per-page="perPage"
+        align="fill"
+        size="sm"
+        class="my-0"
+      ></b-pagination>
+    </b-col>
 
     <!-- Info modal -->
     <b-modal
@@ -120,8 +126,10 @@
 <script>
 export default {
   props: {
+
     items: Array,
     fields: Array,
+    urlEditForm: String,
   },
   data() {
     return {
@@ -151,11 +159,14 @@ export default {
         });
     },
   },
-  mounted() {
-    // Set the initial number of items
-    this.totalRows = this.items.length;
-  },
+ 
   methods: {
+    goEditForm(item){
+      console.log(item)
+  
+      this.$router.push({ path: this.urlEditForm+"/"+item.id,  params: {item}});
+     
+    },
     info(item, index, button) {
       this.infoModal.title = `Row index: ${index}`;
       this.infoModal.content = JSON.stringify(item, null, 2);
@@ -170,6 +181,7 @@ export default {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
     },
+   
   },
 };
 </script>
