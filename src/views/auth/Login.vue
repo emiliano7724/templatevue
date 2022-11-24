@@ -130,9 +130,9 @@ export default {
             });
           } else {
             this.$root.$emit("login", true);
-            localStorage.setItem("auth", "true");
+           // localStorage.setItem("auth", "true");
             localStorage.setItem("token", response.data.DATA.token);
-            localStorage.setItem("user", response.data.DATA.user);
+          //  localStorage.setItem("user", response.data.DATA.user);
             this.$router.push({ name: "Home" });
           }
         })

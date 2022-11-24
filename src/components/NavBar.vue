@@ -40,7 +40,7 @@
             <!-- Using 'button-content' slot -->
             <template #button-content>
               <b-avatar variant="success" icon="person-fill"></b-avatar>
-              Admin
+              {{userName}}
             </template>
             <b-dropdown-item to="/usuarios/perfil"
               ><b-icon icon="people-fill"></b-icon>Perfil</b-dropdown-item
@@ -62,19 +62,37 @@ export default {
   props: {
     appName: String,
   },
+  data() {
+    return {
+      userName:""
+    }
+ 
+  },
+  created() {
+    this.getUser();
+  },
   methods: {
     logout() {
       User.logout().then((response) => {
         if (response.data.STATUS === "500") {
           swal("Error!", response.data.MESSAGE, "error");
-        } else {
-          swal("Gracias por vistar la web!", "Hasta pronto", "success");
-        }
+        } 
         this.$root.$emit("login", false);
-        localStorage.setItem("auth", "false");
-        localStorage.setItem("token", "");
         this.$router.push({ name: "Login" });
       });
+    },
+    getUser() {
+      User.getUser().then((response) => {
+       
+     this.userName=response.data.name.toUpperCase();
+        
+        
+      })
+      .catch((error) => {
+      console.log(error)
+      });
+    
+      
     },
   },
 };

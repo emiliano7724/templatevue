@@ -6,12 +6,22 @@ import UsuarioCreate from '../views/users/UsuarioCreate.vue'
 import UsuarioEdit from '../views/users/UsuarioEdit.vue'
 import UsuarioPerfil from '../views/users/UsuarioPerfil.vue'
 import Login from '../views/auth/Login.vue'
+import axios from "axios";
 
 Vue.use(VueRouter)
+export default new VueRouter({
+  mode: 'hash', // https://router.vuejs.org/api/#mode
+  linkActiveClass: 'active',
+  scrollBehavior: () => ({ y: 0 }),
+  routes: routes()
+});
 
-const routes = [
+
+function routes () {
+
+return [
   {
-    path: '/login',
+    path: '/',
     name: 'Login',
     component: Login
   },
@@ -66,11 +76,7 @@ const routes = [
     ]
   }
 ]
+}
 
-const router = new VueRouter({
-  mode: 'hash',
-  base: process.env.BASE_URL,
-  routes
-})
 
-export default router
+

@@ -26,37 +26,29 @@ export default {
   },
   async saveEntity(form) {
     await Csrf.getCookie();
-    const token=localStorage.getItem('token');
+ /*    const token=localStorage.getItem('token');  // esto nos sirve en el caso que trabajemos con tokens, y pasamos config como tercer parametro
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-  };
-    return Api.post("api/user/store", form,config);
+  }; */
+    return Api.post("api/user/store", form);
   },
   async updateEntity(form) {
     await Csrf.getCookie();
-    const token=localStorage.getItem('token');
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-  };
-    return Api.put("api/user/update", form,config);
+  
+    return Api.put("api/user/update", form);
   },
 
   async getUsers() {
-     const token=localStorage.getItem('token');
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-  }; 
-    return Api.get("api/users/index",config);
+    await Csrf.getCookie();
+    
+    return Api.get("api/users/index");
   },
 
-  async getUser(params) {
+  async getUser() {
    
     await Csrf.getCookie();
-    const token=localStorage.getItem('token');
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-  };
-    return Api.post("api/user/edit", params,config);
+   
+    return Api.get("api/user");
   },
   
 };

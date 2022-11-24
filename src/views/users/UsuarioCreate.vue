@@ -2,8 +2,12 @@
   <div>
     <b-container fluid="lg">
       <b-overlay :show="isLoading" rounded="sm">
-        <Card :titulo="tituloCard" :conBotonVolver="conBotonVolver" :conInfoHelper="conInfoHelper" :infoHelper="infoHelper">
-         
+        <Card
+          :titulo="tituloCard"
+          :conBotonVolver="conBotonVolver"
+          :conInfoHelper="conInfoHelper"
+          :infoHelper="infoHelper"
+        >
           <div>
             <b-form @submit.stop.prevent>
               <b-row>
@@ -57,10 +61,12 @@
               <b-col></b-col>
               <b-col>
                 <b-button-group class="mx-1">
-                  <b-button variant="success" @click="saveEntity"
-                    >{{tittleButtonSubmit}}</b-button
-                  >
-                  <b-button @click="resetForm">{{tittleButtonCancel}}</b-button>
+                  <b-button variant="success" @click="saveEntity">{{
+                    tittleButtonSubmit
+                  }}</b-button>
+                  <b-button @click="resetForm">{{
+                    tittleButtonCancel
+                  }}</b-button>
                 </b-button-group>
               </b-col>
             </b-row>
@@ -113,8 +119,8 @@ export default {
   },
   computed: {
     stateName() {
-      return Validators.validarMinLength(this.form.name.length,4);
-         },
+      return Validators.validarMinLength(this.form.name.length, 4);
+    },
     invalidFeedbackName() {
       if (this.form.name.length > 0) {
         return "Escribe al menos 4 caracteres";
@@ -151,7 +157,6 @@ export default {
               if (response.data.STATUS === "500") {
                 swal("Error!", response.data.MESSAGE, "error");
               } else {
-              
                 swal(
                   "Guardado!",
                   this.tituloSingular + " almacenado con éxito",
@@ -169,13 +174,14 @@ export default {
                   error.response.data.errors
                 );
               }
+              if (error.response.status === 401) {
+                this.$router.push({ name: "Login" });
+              }
             });
         }
       });
     },
-    resetForm(event){
-     
-     
+    resetForm(event) {
       swal({
         title: "Atención",
         text: "Estas seguro de cancelar ? Se perdará la info cargada en el formulario.",
@@ -183,15 +189,13 @@ export default {
         dangerMode: true,
       }).then((willDelete) => {
         if (willDelete) {
-          event.preventDefault()
-        // Reset our form values
-        this.form.email = ''
-        this.form.name = ''
+          event.preventDefault();
+          // Reset our form values
+          this.form.email = "";
+          this.form.name = "";
         }
       });
-       
-      
-    }
+    },
   },
 };
 </script>
